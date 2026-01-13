@@ -1,13 +1,23 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-require('dotenv').config(); // Add this line
+require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-// Middleware
-app.use(cors());
+// CORS configuration
+const corsOptions = {
+  origin: [
+    'http://localhost:3000',
+    'https://your-netlify-site.netlify.app', // Your Netlify URL
+    'https://*.netlify.app' // All Netlify subdomains
+  ],
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Import routes
@@ -30,6 +40,15 @@ app.get('/api/health', (req, res) => {
     status: 'OK', 
     message: 'Virtual Bank API is running',
     timestamp: new Date().toISOString()
+  });
+});
+
+// For Render health checks
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'Virtual Savings Bank API',
+    status: 'online',
+    version: '1.0.0'
   });
 });
 
