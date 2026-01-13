@@ -3,7 +3,7 @@ import MobileTabs from "../components/Shared/MobileTabs";
 import Footer from "../components/Shared/Footer";
 import { useNavigate } from 'react-router-dom';
 
-const API_BASE = 'http://localhost:5001/api';
+const API_BASE = 'https://virtual-savings-bank-backend.onrender.com/api';
 
 const CustomerServicePage = () => {
   const navigate = useNavigate();

@@ -14,7 +14,7 @@ import TransactionHistoryPage from './pages/TransactionHistoryPage';
 import SafeBoxPage from './pages/SafeBoxPage'; // Add this import
 
 // API base URL
-const API_BASE = 'http://localhost:5001/api';
+const API_BASE = 'https://virtual-savings-bank-backend.onrender.com/api';
 
 function App() {
   const [user, setUser] = React.useState(() => {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const API_BASE = 'http://localhost:5001/api';
+const API_BASE = 'https://virtual-savings-bank-backend.onrender.com/api';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
