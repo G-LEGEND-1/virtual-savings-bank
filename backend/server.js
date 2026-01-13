@@ -6,12 +6,12 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-// CORS configuration
+// CORS configuration - REMOVED TRAILING SLASH
 const corsOptions = {
   origin: [
     'http://localhost:3000',
-    'https://reliable-stroopwafel-69a762.netlify.app/', // Your Netlify URL
-    'https://*.netlify.app' // All Netlify subdomains
+    'https://reliable-stroopwafel-69a762.netlify.app', // NO SLASH HERE
+    'https://*.netlify.app'
   ],
   credentials: true,
   optionsSuccessStatus: 200
