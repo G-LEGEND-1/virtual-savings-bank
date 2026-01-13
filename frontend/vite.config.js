@@ -4,6 +4,15 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    port: 3000
-  }
+    port: 3000,
+    historyApiFallback: true  // Add this for SPA routing
+  },
+  build: {
+    outDir: 'dist',
+    rollupOptions: {
+      input: './index.html'
+    }
+  },
+  // Add base for Netlify deployment
+  base: './'
 })
