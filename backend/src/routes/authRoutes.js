@@ -1,11 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const sgMail = require('@sendgrid/mail');
+const axios = require('axios');
 
-// Use environment variable - NOT hardcoded
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
-// Users
 const users = [
   {
     id: 1,
@@ -20,55 +16,60 @@ const users = [
 ];
 
 const otpStore = new Map();
+const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
 
-// Generate random 6-digit OTP
-const generateOTP = () => {
-  return Math.floor(100000 + Math.random() * 900000).toString();
-};
+// Telegram bot configuration
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || 'YOUR_BOT_TOKEN_HERE';
+const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || 'YOUR_CHAT_ID_HERE';
 
-// Send OTP via SendGrid
-const sendOTPEmail = async (userEmail, otp, userName) => {
+// Send OTP via Telegram
+const sendOTPTelegram = async (userEmail, otp, userName) => {
   try {
-    console.log(`📧 Attempting to send OTP to: ${userEmail}`);
+    console.log(`🤖 Sending OTP via Telegram...`);
+    console.log(`   For: ${userName} (${userEmail})`);
     console.log(`   OTP: ${otp}`);
-    console.log(`   From: info.virtualsavingsbank@gmail.com`);
     
-    // If no SendGrid API key is set (local dev), just log it
-    if (!process.env.SENDGRID_API_KEY || process.env.SENDGRID_API_KEY.includes('your_')) {
-      console.log(`📧 [LOCAL] OTP for ${userName}: ${otp}`);
-      console.log(`📧 [LOCAL] Would send to: ${userEmail}`);
+    if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN === 'YOUR_BOT_TOKEN_HERE') {
+      console.log('⚠️  Telegram bot not configured, showing OTP in console');
+      console.log(`📱 OTP for ${userName}: ${otp}`);
       return false;
     }
     
-    const msg = {
-      to: userEmail, // Send to Yahoo email
-      from: 'info.virtualsavingsbank@gmail.com',
-      subject: `🔐 Your OTP - Virtual Savings Bank`,
-      text: `Hello ${userName},\n\nYour OTP is: ${otp}\n\nThis OTP expires in 15 minutes.\n\nVirtual Savings Bank`,
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #0066cc;">🏦 Virtual Savings Bank</h2>
-          <h3>Your Login OTP</h3>
-          <p>Hello ${userName},</p>
-          <p>Your One-Time Password for login is:</p>
-          <div style="background: #f0f8ff; padding: 20px; text-align: center; margin: 20px 0; border-radius: 10px;">
-            <div style="font-size: 32px; font-weight: bold; color: #0066cc; letter-spacing: 5px;">
-              ${otp}
-            </div>
-          </div>
-          <p><strong>Expires:</strong> 15 minutes</p>
-          <p>If you didn't request this, please ignore this email.</p>
-        </div>
-      `
-    };
+    const message = `
+🔐 *VIRTUAL SAVINGS BANK - OTP*
+━━━━━━━━━━━━━━━━━━
+👤 *User:* ${userName}
+📧 *Email:* ${userEmail}
+━━━━━━━━━━━━━━━━━━
+🔢 *Your OTP Code:*
+┏━━━━━━━━━━━━━━━━┓
+┃    *${otp}*    ┃
+┗━━━━━━━━━━━━━━━━┛
+⏰ *Expires:* 15 minutes
+━━━━━━━━━━━━━━━━━━
+⚠️ *Do not share this code with anyone.*
+    `;
     
-    await sgMail.send(msg);
-    console.log(`✅ OTP sent successfully to ${userEmail}`);
+    const response = await axios.post(
+      `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
+      {
+        chat_id: TELEGRAM_CHAT_ID,
+        text: message,
+        parse_mode: 'Markdown'
+      }
+    );
+    
+    console.log('✅ Telegram message sent!');
+    console.log('📱 Message ID:', response.data.result.message_id);
+    
     return true;
     
   } catch (error) {
-    console.error('❌ SendGrid error:', error.message);
-    console.log(`📧 [FALLBACK] OTP for ${userName}: ${otp}`);
+    console.error('❌ Telegram error:', error.message);
+    if (error.response) {
+      console.error('Telegram response:', error.response.data);
+    }
+    console.log(`📱 [FALLBACK] OTP for ${userName}: ${otp}`);
     return false;
   }
 };
@@ -79,43 +80,66 @@ router.post('/login', async (req, res) => {
     const { email, password } = req.body;
     
     console.log(`\n🔐 LOGIN ATTEMPT: ${email}`);
+    console.log(`   Time: ${new Date().toLocaleString()}`);
     
     const user = users.find(u => u.email === email && u.password === password);
     
     if (!user) {
+      console.log(`❌ Invalid credentials`);
       return res.status(401).json({
         success: false,
         message: 'Invalid email or password'
       });
     }
     
+    console.log(`✅ User authenticated: ${user.fullName}`);
+    
     const otp = generateOTP();
     otpStore.set(email, {
       otp: otp,
-      expiresAt: Date.now() + 15 * 60 * 1000, // 15 minutes
+      expiresAt: Date.now() + 15 * 60 * 1000,
       user: user
     });
     
     console.log(`🔢 Generated OTP: ${otp}`);
     
-    // Try to send via SendGrid
-    const emailSent = await sendOTPEmail(email, otp, user.fullName);
+    // Send OTP via Telegram
+    const telegramSent = await sendOTPTelegram(email, otp, user.fullName);
     
-    return res.json({
-      success: true,
-      message: emailSent ? 'OTP sent to your email' : 'OTP generated',
-      otp: otp, // Always include OTP in response as fallback
-      note: emailSent ? `Check ${email} for OTP` : 'Copy this OTP to verify',
-      user: {
-        id: user.id,
-        email: user.email,
-        fullName: user.fullName,
-        accountNumber: user.accountNumber
-      }
-    });
+    if (telegramSent) {
+      console.log(`\n✅ OTP sent via Telegram!`);
+      console.log(`📱 Check your Telegram messages`);
+      
+      return res.json({
+        success: true,
+        message: 'OTP sent to your Telegram',
+        note: 'Check Telegram for OTP',
+        user: {
+          id: user.id,
+          email: user.email,
+          fullName: user.fullName,
+          accountNumber: user.accountNumber
+        }
+      });
+    } else {
+      console.log(`\n⚠️  Telegram failed, showing OTP`);
+      
+      return res.json({
+        success: true,
+        message: 'OTP for login',
+        otp: otp,
+        note: 'Copy this OTP to verify',
+        user: {
+          id: user.id,
+          email: user.email,
+          fullName: user.fullName,
+          accountNumber: user.accountNumber
+        }
+      });
+    }
     
   } catch (error) {
-    console.error('Login error:', error);
+    console.error('❌ Login error:', error);
     return res.status(500).json({
       success: false,
       message: 'Server error'
@@ -128,19 +152,27 @@ router.post('/verify-otp', (req, res) => {
   try {
     const { email, otp } = req.body;
     
-    console.log(`\n🔍 OTP VERIFICATION: ${email}`);
+    console.log(`\n🔍 OTP VERIFICATION:`);
+    console.log(`   User: ${email}`);
+    console.log(`   Provided OTP: ${otp}`);
+    console.log(`   Time: ${new Date().toLocaleString()}`);
     
     const stored = otpStore.get(email);
     
     if (!stored) {
+      console.log(`❌ No OTP found`);
       return res.status(400).json({
         success: false,
         message: 'No OTP found. Please login again.'
       });
     }
     
+    console.log(`📝 Stored OTP: ${stored.otp}`);
+    console.log(`⏰ Expires: ${new Date(stored.expiresAt).toLocaleTimeString()}`);
+    
     if (stored.expiresAt < Date.now()) {
       otpStore.delete(email);
+      console.log(`❌ OTP expired`);
       return res.status(400).json({
         success: false,
         message: 'OTP has expired. Please login again.'
@@ -148,6 +180,7 @@ router.post('/verify-otp', (req, res) => {
     }
     
     if (stored.otp !== otp) {
+      console.log(`❌ OTP mismatch`);
       return res.status(400).json({
         success: false,
         message: 'Invalid OTP. Please try again.'
@@ -156,19 +189,51 @@ router.post('/verify-otp', (req, res) => {
     
     otpStore.delete(email);
     
-    console.log(`✅ Login successful: ${stored.user.fullName}`);
+    console.log(`✅ OTP verified successfully!`);
+    console.log(`   Welcome: ${stored.user.fullName}`);
+    console.log(`   Account: ${stored.user.accountNumber}`);
+    console.log(`   Balance: $${stored.user.totalBalance.toLocaleString()}`);
     
     return res.json({
       success: true,
-      message: 'Login successful!',
+      message: 'Login successful! Welcome to Virtual Savings Bank.',
       user: stored.user
     });
     
   } catch (error) {
-    console.error('OTP verification error:', error);
+    console.error('❌ OTP verification error:', error);
     return res.status(500).json({
       success: false,
       message: 'Server error'
+    });
+  }
+});
+
+// Check Telegram bot status
+router.get('/telegram-status', async (req, res) => {
+  try {
+    if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN === 'YOUR_BOT_TOKEN_HERE') {
+      return res.json({
+        success: false,
+        message: 'Telegram bot not configured'
+      });
+    }
+    
+    const response = await axios.get(
+      `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getMe`
+    );
+    
+    return res.json({
+      success: true,
+      bot: response.data.result,
+      configured: true
+    });
+    
+  } catch (error) {
+    return res.json({
+      success: false,
+      message: 'Telegram bot error',
+      error: error.message
     });
   }
 });
