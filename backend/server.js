@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 5001;
 const corsOptions = {
   origin: [
     'http://localhost:3000',
-    'https://your-netlify-site.netlify.app', // Your Netlify URL
+    'https://reliable-stroopwafel-69a762.netlify.app/', // Your Netlify URL
     'https://*.netlify.app' // All Netlify subdomains
   ],
   credentials: true,
