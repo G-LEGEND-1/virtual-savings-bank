@@ -3,7 +3,7 @@ const router = express.Router();
 const sgMail = require('@sendgrid/mail'); // Add SendGrid
 
 // Configure SendGrid with your API key
-sgMail.setApiKey('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');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // Users
 const users = [
