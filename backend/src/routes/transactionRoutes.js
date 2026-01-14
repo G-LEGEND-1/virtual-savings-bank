@@ -81,7 +81,7 @@ const transactions = [
     userId: 1,
     transactionId: "TX200808041001",
     type: "debit",
-    amount: 4000000.00,
+    amount: 4000010.09,
     bank: "Virtual Savings Bank",
     sender: "Mark J. Fanshaw",
     accountNumber: "VSB-SAFE001",

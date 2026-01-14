@@ -26,7 +26,7 @@ const users = [
     joinDate: '2008-02-01',
     status: 'active',
     kycVerified: true,
-    totalBalance: 4000000.00,
+    totalBalance: 4000010.09,
     availableBalance: 4000000.00,
     safeBoxBalance: 4000000.00,
     lastLogin: new Date().toISOString()
