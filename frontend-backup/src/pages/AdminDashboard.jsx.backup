@@ -1,394 +1,325 @@
-import React, { useState } from 'react';
-import MessageSender from '../components/Admin/MessageSender';
-import AdminSafeBox from '../components/Admin/AdminSafeBox';
-import CustomerService from '../components/User/CustomerService';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import MobileTabs from '../components/Shared/MobileTabs';
 
-const AdminDashboard = () => {
-  const [activeTab, setActiveTab] = useState('sendMoney');
-  const [showSafeBoxModal, setShowSafeBoxModal] = useState(false);
-  const [showCustomerService, setShowCustomerService] = useState(false);
-  const [sentMessages, setSentMessages] = useState([]);
-  const [unreadNotifications, setUnreadNotifications] = useState(2);
-  
-  const [transaction, setTransaction] = useState({
-    bank: 'chase',
-    sender: 'John Doe',
-    amount: '',
-    date: new Date().toISOString().split('T')[0],
-    time: '14:30',
-    year: new Date().getFullYear(),
-    remark: '',
-    userId: '1',
-    transactionId: `TX-${new Date().getTime().toString().slice(-8)}`
-  });
+const API_BASE = 'https://virtual-savings-bank-backend.onrender.com/api';
 
-  const generateTransactionId = () => {
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-    let id = 'TX-';
-    for (let i = 0; i < 8; i++) {
-      id += chars.charAt(Math.floor(Math.random() * chars.length));
+const NotificationsPage = () => {
+  const navigate = useNavigate();
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [activeFilter, setActiveFilter] = useState('all');
+  const [expandedNotifications, setExpandedNotifications] = useState({});
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user) {
+      navigate('/');
+      return;
     }
-    return id;
+    
+    fetchNotifications(user.id);
+  }, [navigate]);
+
+  const fetchNotifications = async (userId) => {
+    setLoading(true);
+    try {
+      const response = await fetch(`${API_BASE}/notifications/user/${userId}`);
+      const data = await response.json();
+      
+      if (data.success) {
+        setNotifications(data.data);
+      }
+    } catch (error) {
+      console.error('Failed to fetch notifications:', error);
+    }
+    setLoading(false);
   };
 
-  const handleSendMessage = (messageData) => {
-    const newMessage = {
-      id: Date.now(),
-      ...messageData,
-      timestamp: new Date().toISOString(),
-      status: 'sent'
-    };
-    
-    setSentMessages(prev => [newMessage, ...prev]);
-    alert(`✅ Message sent!\nSubject: ${messageData.subject}\nTo: User #${messageData.userId}`);
-    setUnreadNotifications(prev => prev + 1);
+  const markAsRead = async (id) => {
+    try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      const response = await fetch(`${API_BASE}/notifications/${id}/read?userId=${user.id}`, {
+        method: 'PATCH'
+      });
+      
+      if (response.ok) {
+        setNotifications(prev =>
+          prev.map(notif =>
+            notif.id === id ? { ...notif, isRead: true } : notif
+          )
+        );
+      }
+    } catch (error) {
+      console.error('Failed to mark as read:', error);
+    }
   };
 
-  const markNotificationsAsRead = () => {
-    setUnreadNotifications(0);
+  const markAllAsRead = async () => {
+    try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      const response = await fetch(`${API_BASE}/notifications/mark-all-read/${user.id}`, {
+        method: 'PATCH'
+      });
+      
+      if (response.ok) {
+        setNotifications(prev =>
+          prev.map(notif => ({ ...notif, isRead: true }))
+        );
+        alert('All notifications marked as read');
+      }
+    } catch (error) {
+      console.error('Failed to mark all as read:', error);
+    }
   };
 
-  const handleSendTransaction = (e) => {
-    e.preventDefault();
+  const toggleNotificationExpansion = (notificationId) => {
+    // If clicking on an unread notification, mark it as read first
+    const notification = notifications.find(n => n.id === notificationId);
+    if (notification && !notification.isRead) {
+      markAsRead(notificationId);
+    }
+
+    // Toggle the expanded state
+    setExpandedNotifications(prev => ({
+      ...prev,
+      [notificationId]: !prev[notificationId]
+    }));
+  };
+
+  const getFilteredNotifications = () => {
+    switch (activeFilter) {
+      case 'unread':
+        return notifications.filter(notif => !notif.isRead);
+      case 'read':
+        return notifications.filter(notif => notif.isRead);
+      default:
+        return notifications;
+    }
+  };
+
+  const getNotificationIcon = (notification) => {
+    // First try to use the icon from backend
+    if (notification.icon) {
+      return notification.icon;
+    }
     
-    const transactionData = {
-      ...transaction,
-      transactionId: transaction.transactionId || generateTransactionId(),
-      type: 'credit',
-      accountNumber: '******' + transaction.userId.toString().padStart(5, '0')
-    };
-    
-    alert(`✅ Transaction sent!\nTransaction ID: ${transactionData.transactionId}\nAmount: $${transaction.amount}\nFrom: ${transaction.sender} (${transaction.bank})\nDate: ${transaction.date} ${transaction.time} ${transaction.year}\nUser ID: ${transaction.userId}`);
-    
-    // Reset form with new transaction ID
-    setTransaction({
-      bank: 'chase',
-      sender: 'John Doe',
-      amount: '',
-      date: new Date().toISOString().split('T')[0],
-      time: '14:30',
-      year: new Date().getFullYear(),
-      remark: '',
-      userId: '1',
-      transactionId: generateTransactionId()
+    // Fallback to type-based icons
+    switch (notification.type) {
+      case 'transaction':
+        return 'fas fa-money-bill-wave';
+      case 'safebox':
+        return 'fas fa-vault';
+      case 'welcome':
+        return 'fas fa-user-plus';
+      case 'info':
+        return 'fas fa-info-circle';
+      case 'message':
+        return 'fas fa-envelope';
+      default:
+        return 'fas fa-bell';
+    }
+  };
+
+  const getNotificationColor = (notification) => {
+    // Use type-based colors
+    switch (notification.type) {
+      case 'transaction': return 'text-green-600 bg-green-100';
+      case 'safebox': return 'text-yellow-600 bg-yellow-100';
+      case 'welcome': return 'text-blue-600 bg-blue-100';
+      case 'info': return 'text-purple-600 bg-purple-100';
+      case 'message': return 'text-indigo-600 bg-indigo-100';
+      default: return 'text-gray-600 bg-gray-100';
+    }
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
     });
-    setUnreadNotifications(prev => prev + 1);
   };
 
-  const formatDateTime = (date, time, year) => {
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const d = new Date(date);
-    return `${months[d.getMonth()]} ${d.getDate()}, ${year} • ${time}`;
-  };
+  const unreadCount = notifications.filter(n => !n.isRead).length;
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="spinner mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading notifications...</p>
+        </div>
+      </div>
+    );
+  }
+
+  const filteredNotifications = getFilteredNotifications();
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Top Navigation */}
-      <nav className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-3 py-2">
+    <div className="min-h-screen bg-gray-50 pb-14">
+      {/* Header */}
+      <div className="bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex justify-between items-center">
             <div className="flex items-center">
-              <i className="fas fa-university text-xl text-blue-900 mr-2"></i>
-              <span className="font-bold text-gray-800">Admin Dashboard</span>
-            </div>
-            <div className="flex items-center space-x-3">
-              <button 
-                onClick={() => setShowCustomerService(true)}
-                className="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700"
+              <button
+                onClick={() => navigate('/dashboard')}
+                className="mr-3 text-gray-600 hover:text-gray-800"
               >
-                <i className="fas fa-headset mr-1"></i>
-                Support
+                <i className="fas fa-arrow-left"></i>
               </button>
-              
-              <button 
-                onClick={markNotificationsAsRead}
-                className="relative"
-                title="Notifications"
-              >
-                <i className="fas fa-bell text-gray-600"></i>
-                {unreadNotifications > 0 && (
-                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                    {unreadNotifications}
-                  </span>
-                )}
-              </button>
-              
-              <button 
-                onClick={() => {
-                  localStorage.removeItem('user');
-                  window.location.href = '/';
-                }}
-                className="px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600"
-              >
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      {/* Tab Navigation */}
-      <div className="bg-white border-b">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex">
-            <button
-              onClick={() => setActiveTab('sendMoney')}
-              className={`flex-1 py-2 px-1 text-sm font-medium ${activeTab === 'sendMoney' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600 hover:text-blue-600'}`}
-            >
-              <i className="fas fa-money-bill-transfer mr-1"></i>
-              Send Money
-            </button>
-            <button
-              onClick={() => setActiveTab('sendMessage')}
-              className={`flex-1 py-2 px-1 text-sm font-medium ${activeTab === 'sendMessage' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600 hover:text-blue-600'}`}
-            >
-              <i className="fas fa-envelope mr-1"></i>
-              Messages
-            </button>
-            <button
-              onClick={() => setActiveTab('safebox')}
-              className={`flex-1 py-2 px-1 text-sm font-medium ${activeTab === 'safebox' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600 hover:text-blue-600'}`}
-            >
-              <i className="fas fa-vault mr-1"></i>
-              Safe Box
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-3 py-4 mobile-container">
-        {/* Send Money Tab */}
-        {activeTab === 'sendMoney' && (
-          <div>
-            <h1 className="text-lg font-bold text-gray-800 mb-4">
-              <i className="fas fa-paper-plane mr-2"></i>
-              Send Money
-            </h1>
-            
-            <div className="bg-white rounded-lg shadow p-3 mb-4">
-              <form onSubmit={handleSendTransaction} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-gray-700 mb-1 text-xs">Bank Name</label>
-                    <select 
-                      value={transaction.bank}
-                      onChange={(e) => setTransaction({...transaction, bank: e.target.value})}
-                      className="w-full border border-gray-300 rounded p-2 text-sm"
-                    >
-                      <option value="chase">Chase Bank</option>
-                      <option value="boa">Bank of America</option>
-                      <option value="wells">Wells Fargo</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-gray-700 mb-1 text-xs">Sender Name</label>
-                    <input
-                      type="text"
-                      value={transaction.sender}
-                      onChange={(e) => setTransaction({...transaction, sender: e.target.value})}
-                      className="w-full border border-gray-300 rounded p-2 text-sm"
-                      placeholder="John Doe"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-gray-700 mb-1 text-xs">Amount (USD)</label>
-                    <input
-                      type="number"
-                      value={transaction.amount}
-                      onChange={(e) => setTransaction({...transaction, amount: e.target.value})}
-                      className="w-full border border-gray-300 rounded p-2 text-sm"
-                      placeholder="500.00"
-                      step="0.01"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-gray-700 mb-1 text-xs">Transaction ID</label>
-                    <div className="flex">
-                      <input
-                        type="text"
-                        value={transaction.transactionId}
-                        onChange={(e) => setTransaction({...transaction, transactionId: e.target.value})}
-                        className="w-full border border-gray-300 rounded p-2 text-sm"
-                        placeholder="TX-8X45K9P2"
-                        required
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setTransaction({...transaction, transactionId: generateTransactionId()})}
-                        className="ml-1 bg-blue-600 text-white px-2 rounded text-sm hover:bg-blue-700"
-                      >
-                        New
-                      </button>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-gray-700 mb-1 text-xs">Date</label>
-                    <input
-                      type="date"
-                      value={transaction.date}
-                      onChange={(e) => setTransaction({...transaction, date: e.target.value})}
-                      className="w-full border border-gray-300 rounded p-2 text-sm"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-gray-700 mb-1 text-xs">Time</label>
-                    <input
-                      type="time"
-                      value={transaction.time}
-                      onChange={(e) => setTransaction({...transaction, time: e.target.value})}
-                      className="w-full border border-gray-300 rounded p-2 text-sm"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-gray-700 mb-1 text-xs">Year</label>
-                    <input
-                      type="number"
-                      value={transaction.year}
-                      onChange={(e) => setTransaction({...transaction, year: e.target.value})}
-                      className="w-full border border-gray-300 rounded p-2 text-sm"
-                      min="2000"
-                      max="2030"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-gray-700 mb-1 text-xs">Select User</label>
-                    <select
-                      value={transaction.userId}
-                      onChange={(e) => setTransaction({...transaction, userId: e.target.value})}
-                      className="w-full border border-gray-300 rounded p-2 text-sm"
-                    >
-                      <option value="1">Mark Fanshaw (fanshawmarkk@yahoo.com)</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-gray-700 mb-1 text-xs">Remark / Description</label>
-                  <input
-                    type="text"
-                    value={transaction.remark}
-                    onChange={(e) => setTransaction({...transaction, remark: e.target.value})}
-                    className="w-full border border-gray-300 rounded p-2 text-sm"
-                    placeholder="Payment for services"
-                    required
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full bg-gradient-to-r from-green-600 to-green-700 text-white py-2 rounded font-semibold hover:opacity-90 text-sm"
-                >
-                  <i className="fas fa-paper-plane mr-1"></i>
-                  Send Transaction
-                </button>
-              </form>
-            </div>
-          </div>
-        )}
-
-        {/* Send Message Tab */}
-        {activeTab === 'sendMessage' && (
-          <div>
-            <h1 className="text-lg font-bold text-gray-800 mb-4">
-              <i className="fas fa-envelope mr-2"></i>
-              Messages
-            </h1>
-            
-            <MessageSender onSend={handleSendMessage} />
-            
-            {/* Sent Messages History */}
-            <div className="bg-white rounded-lg shadow p-3 mt-4">
-              <h3 className="font-bold text-gray-800 mb-3 text-sm">Sent Messages</h3>
-              
-              {sentMessages.length === 0 ? (
-                <div className="text-center py-4 text-gray-500">
-                  <i className="fas fa-envelope-open-text text-2xl mb-2"></i>
-                  <p className="text-sm">No messages sent yet</p>
-                </div>
-              ) : (
-                <div className="space-y-2">
-                  {sentMessages.map((msg) => (
-                    <div key={msg.id} className="border border-gray-200 rounded p-2 hover:bg-gray-50">
-                      <div className="flex justify-between items-start mb-1">
-                        <h4 className="font-bold text-gray-800 text-sm">{msg.subject}</h4>
-                        <span className="text-xs text-gray-500">
-                          {msg.useCustomDate && msg.customDate 
-                            ? formatDateTime(msg.customDate, msg.customTime, msg.customYear)
-                            : new Date(msg.timestamp).toLocaleString([], { hour: '2-digit', minute: '2-digit' })}
-                        </span>
-                      </div>
-                      <p className="text-gray-600 text-xs mb-1">{msg.content}</p>
-                      <div className="flex justify-between text-xs text-gray-500">
-                        <span>To: User #{msg.userId}</span>
-                        {msg.useCustomDate && (
-                          <span className="text-blue-600">
-                            <i className="fas fa-calendar-alt mr-0.5"></i>
-                            Custom time
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Safe Box Tab */}
-        {activeTab === 'safebox' && (
-          <div>
-            <h1 className="text-lg font-bold text-gray-800 mb-4">
-              <i className="fas fa-vault mr-2"></i>
-              Safe Box
-            </h1>
-            
-            <div className="bg-white rounded-lg shadow p-3 mb-4">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-gradient-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <i className="fas fa-vault text-xl text-white"></i>
-                </div>
-                <h2 className="font-bold text-gray-800 mb-1">User Safe Box</h2>
-                <p className="text-gray-600 text-xs mb-3">Manage deposits and withdrawals</p>
-                
-                <button
-                  onClick={() => setShowSafeBoxModal(true)}
-                  className="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white py-2 rounded font-semibold hover:opacity-90 text-sm"
-                >
-                  <i className="fas fa-cogs mr-1"></i>
-                  Manage Safe Box
-                </button>
+              <div>
+                <h1 className="text-xl font-bold text-gray-800">Notifications</h1>
+                <p className="text-gray-600 text-sm">
+                  {unreadCount} unread • {notifications.length} total
+                </p>
               </div>
             </div>
+            
+            <button
+              onClick={markAllAsRead}
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm"
+              disabled={unreadCount === 0}
+            >
+              <i className="fas fa-check-double mr-2"></i>
+              Mark All Read
+            </button>
           </div>
-        )}
+        </div>
       </div>
 
-      {/* Modals */}
-      <AdminSafeBox 
-        isOpen={showSafeBoxModal}
-        onClose={() => setShowSafeBoxModal(false)}
-      />
+      {/* Mobile Tabs */}
+      <MobileTabs />
 
-      <CustomerService 
-        isOpen={showCustomerService}
-        onClose={() => setShowCustomerService(false)}
-        userType="admin"
-      />
+      {/* Filter Tabs */}
+      <div className="max-w-7xl mx-auto px-4 pt-4">
+        <div className="bg-white rounded-lg shadow overflow-hidden mb-4">
+          <div className="flex">
+            <button
+              onClick={() => setActiveFilter('all')}
+              className={`flex-1 py-3 text-center ${activeFilter === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+            >
+              All
+            </button>
+            <button
+              onClick={() => setActiveFilter('unread')}
+              className={`flex-1 py-3 text-center ${activeFilter === 'unread' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+            >
+              Unread
+            </button>
+            <button
+              onClick={() => setActiveFilter('read')}
+              className={`flex-1 py-3 text-center ${activeFilter === 'read' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+            >
+              Read
+            </button>
+          </div>
+        </div>
+
+        {/* Notifications List */}
+        <div className="bg-white rounded-lg shadow overflow-hidden">
+          {filteredNotifications.length > 0 ? (
+            filteredNotifications.map((notification) => (
+              <div
+                key={notification.id}
+                className={`p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer ${!notification.isRead ? 'bg-blue-50' : ''}`}
+                onClick={() => toggleNotificationExpansion(notification.id)}
+              >
+                <div className="flex items-start">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center mr-3 ${getNotificationColor(notification)}`}>
+                    <i className={`${getNotificationIcon(notification)}`}></i>
+                  </div>
+                  
+                  <div className="flex-1">
+                    <div className="flex justify-between items-start mb-1">
+                      <h3 className="font-bold text-gray-800">{notification.title}</h3>
+                      <div className="flex items-center space-x-2">
+                        {!notification.isRead && (
+                          <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                        )}
+                        <span className="text-xs text-gray-500">
+                          {formatDate(notification.timestamp)}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    {/* Short preview - first 100 characters */}
+                    <p className="text-gray-600 text-sm mb-2">
+                      {notification.content.substring(0, 100)}...
+                    </p>
+
+                    {/* Show/hide arrow indicator */}
+                    <div className="flex items-center justify-between mt-2">
+                      <div className="text-xs text-gray-500">
+                        <i className="fas fa-info-circle mr-1"></i>
+                        Click to {expandedNotifications[notification.id] ? 'collapse' : 'expand'}
+                      </div>
+                      <i className={`fas fa-chevron-${expandedNotifications[notification.id] ? 'up' : 'down'} text-gray-400 text-xs`}></i>
+                    </div>
+
+                    {/* Full Message (shown when expanded) */}
+                    {expandedNotifications[notification.id] && (
+                      <div className="mt-3 p-3 bg-gray-50 border border-gray-200 rounded">
+                        <h4 className="font-bold text-gray-700 text-sm mb-2">Full Message:</h4>
+                        <p className="text-gray-600 text-sm whitespace-pre-line">
+                          {notification.content}
+                        </p>
+                        
+                        {/* Show notification details */}
+                        <div className="mt-3 pt-3 border-t border-gray-200">
+                          <div className="grid grid-cols-2 gap-2 text-xs text-gray-500">
+                            <div>
+                              <span className="font-medium">Type:</span> {notification.type}
+                            </div>
+                            <div>
+                              <span className="font-medium">Date:</span> {formatDate(notification.timestamp)}
+                            </div>
+                            <div>
+                              <span className="font-medium">Status:</span> {notification.isRead ? 'Read' : 'Unread'}
+                            </div>
+                            <div>
+                              <span className="font-medium">ID:</span> {notification.id}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="p-8 text-center text-gray-500">
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <i className="fas fa-bell-slash text-2xl text-gray-400"></i>
+              </div>
+              <h3 className="font-bold text-gray-600 mb-1">No notifications</h3>
+              <p className="text-sm">You're all caught up!</p>
+            </div>
+          )}
+        </div>
+
+        {/* Help Text */}
+        <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+          <div className="flex items-start">
+            <i className="fas fa-info-circle text-blue-500 text-lg mr-3 mt-1"></i>
+            <div>
+              <h4 className="font-bold text-gray-700 text-sm mb-1">About Notifications</h4>
+              <p className="text-gray-600 text-xs">
+                • Click on any notification to expand and see full details<br/>
+                • Unread notifications have a blue dot indicator<br/>
+                • Notifications are automatically cleared after 30 days
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default AdminDashboard;
+export default NotificationsPage;
