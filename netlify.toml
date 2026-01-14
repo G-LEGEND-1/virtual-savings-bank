@@ -3,10 +3,25 @@
   publish = "frontend/dist"
   functions = "functions"
 
+# Proxy API requests to backend
+[[redirects]]
+  from = "/api/*"
+  to = "https://virtual-savings-bank-backend.onrender.com/api/:splat"
+  status = 200
+  force = true
+
+# SPA routing
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
+# Force HTTPS
+[[redirects]]
+  from = "http://vsbonline.site/*"
+  to = "https://vsbonline.site/:splat"
+  status = 301
+  force = true
 
 [[headers]]
   for = "/*"
@@ -15,3 +30,4 @@
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+    Access-Control-Allow-Origin = "https://vsbonline.site"

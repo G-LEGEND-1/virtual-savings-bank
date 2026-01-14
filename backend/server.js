@@ -6,14 +6,18 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-// CORS configuration - REMOVED TRAILING SLASH
+// CORS configuration - ADD YOUR DOMAIN
 const corsOptions = {
   origin: [
     'http://localhost:3000',
-    'https://reliable-stroopwafel-69a762.netlify.app', // NO SLASH HERE
-    'https://*.netlify.app'
+    'https://reliable-stroopwafel-69a762.netlify.app',
+    'https://vsbonline.site',                    // ADD THIS
+    'https://www.vsbonline.site',                // ADD THIS
+    'https://*.vsbonline.site'                   // ADD THIS (wildcard for subdomains)
   ],
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
   optionsSuccessStatus: 200
 };
 

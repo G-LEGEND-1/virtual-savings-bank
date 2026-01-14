@@ -11,54 +11,50 @@ const NotificationsPage = () => {
   const [error, setError] = useState(null);
   const [activeFilter, setActiveFilter] = useState('all');
   const [expandedNotifications, setExpandedNotifications] = useState({});
-  const [markingAllAsRead, setMarkingAllAsRead] = useState(false);
 
   useEffect(() => {
-    const getUser = () => {
-      try {
-        const userData = localStorage.getItem('user');
-        return userData ? JSON.parse(userData) : null;
-      } catch (error) {
-        console.error('Error parsing user data:', error);
-        return null;
-      }
-    };
-
-    const user = getUser();
+    const user = JSON.parse(localStorage.getItem('user'));
+    console.log('User from localStorage:', user); // Debug log
+    
     if (!user) {
       navigate('/');
       return;
     }
     
-    fetchNotifications(user.id);
+    // Try different user ID formats
+    const userId = user.id || 1; // Default to 1 if id doesn't exist
+    console.log('Fetching notifications for userId:', userId);
+    
+    fetchNotifications(userId);
   }, [navigate]);
 
   const fetchNotifications = async (userId) => {
     setLoading(true);
     setError(null);
     try {
+      console.log('Fetching from:', `${API_BASE}/notifications/user/${userId}`);
+      
       const response = await fetch(`${API_BASE}/notifications/user/${userId}`);
       
+      console.log('Response status:', response.status);
+      
       if (!response.ok) {
-        throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`);
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
       
       const data = await response.json();
+      console.log('API Response:', data);
       
       if (data.success) {
-        // Sort by timestamp (newest first)
-        const sortedNotifications = data.data.sort((a, b) => 
-          new Date(b.timestamp) - new Date(a.timestamp)
-        );
-        setNotifications(sortedNotifications);
+        setNotifications(data.data || []);
       } else {
-        throw new Error(data.message || 'Failed to load notifications');
+        throw new Error(data.message || 'Failed to fetch notifications');
       }
     } catch (error) {
       console.error('Failed to fetch notifications:', error);
       setError(error.message);
       
-      // Fallback data to prevent blank screen
+      // Use static data as fallback
       const fallbackNotifications = [
         {
           id: 1,
@@ -92,19 +88,17 @@ const NotificationsPage = () => {
         }
       ];
       setNotifications(fallbackNotifications);
-    } finally {
-      setLoading(false);
     }
+    setLoading(false);
   };
 
+  // Rest of your component functions remain the same...
   const markAsRead = async (id) => {
     try {
       const user = JSON.parse(localStorage.getItem('user'));
-      const response = await fetch(`${API_BASE}/notifications/${id}/read?userId=${user.id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        }
+      const userId = user?.id || 1;
+      const response = await fetch(`${API_BASE}/notifications/${id}/read?userId=${userId}`, {
+        method: 'PATCH'
       });
       
       if (response.ok) {
@@ -116,26 +110,15 @@ const NotificationsPage = () => {
       }
     } catch (error) {
       console.error('Failed to mark as read:', error);
-      // Still update UI even if API call fails
-      setNotifications(prev =>
-        prev.map(notif =>
-          notif.id === id ? { ...notif, isRead: true } : notif
-        )
-      );
     }
   };
 
   const markAllAsRead = async () => {
-    if (notifications.filter(n => !n.isRead).length === 0) return;
-    
-    setMarkingAllAsRead(true);
     try {
       const user = JSON.parse(localStorage.getItem('user'));
-      const response = await fetch(`${API_BASE}/notifications/mark-all-read/${user.id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        }
+      const userId = user?.id || 1;
+      const response = await fetch(`${API_BASE}/notifications/mark-all-read/${userId}`, {
+        method: 'PATCH'
       });
       
       if (response.ok) {
@@ -146,13 +129,6 @@ const NotificationsPage = () => {
       }
     } catch (error) {
       console.error('Failed to mark all as read:', error);
-      // Still update UI
-      setNotifications(prev =>
-        prev.map(notif => ({ ...notif, isRead: true }))
-      );
-      alert('Notifications marked as read (offline)');
-    } finally {
-      setMarkingAllAsRead(false);
     }
   };
 
@@ -227,7 +203,6 @@ const NotificationsPage = () => {
   };
 
   const unreadCount = notifications.filter(n => !n.isRead).length;
-  const filteredNotifications = getFilteredNotifications();
 
   if (loading) {
     return (
@@ -235,52 +210,13 @@ const NotificationsPage = () => {
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-blue-200 border-t-blue-600 mb-4"></div>
           <p className="text-gray-600">Loading notifications...</p>
+          {error && <p className="text-red-500 text-sm mt-2">Error: {error}</p>}
         </div>
       </div>
     );
   }
 
-  if (error) {
-    return (
-      <div className="min-h-screen bg-gray-50 pb-14">
-        {/* Header */}
-        <div className="bg-white shadow-sm">
-          <div className="max-w-7xl mx-auto px-4 py-3">
-            <div className="flex justify-between items-center">
-              <div className="flex items-center">
-                <button
-                  onClick={() => navigate('/dashboard')}
-                  className="mr-3 text-gray-600 hover:text-gray-800"
-                >
-                  <i className="fas fa-arrow-left"></i>
-                </button>
-                <div>
-                  <h1 className="text-xl font-bold text-gray-800">Notifications</h1>
-                  <p className="text-gray-600 text-sm">Using offline mode</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile Tabs */}
-        <MobileTabs />
-
-        {/* Error Message */}
-        <div className="max-w-7xl mx-auto px-4 pt-4">
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
-            <div className="flex items-center">
-              <i className="fas fa-exclamation-triangle text-red-600 text-lg mr-3"></i>
-              <div>
-                <h3 className="font-bold text-red-700">Connection Error</h3>
-                <p className="text-red-600 text-sm">Showing offline notifications. {error}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const filteredNotifications = getFilteredNotifications();
 
   return (
     <div className="min-h-screen bg-gray-50 pb-14">
@@ -291,40 +227,26 @@ const NotificationsPage = () => {
             <div className="flex items-center">
               <button
                 onClick={() => navigate('/dashboard')}
-                className="mr-3 text-gray-600 hover:text-gray-800 p-2 rounded-full hover:bg-gray-100"
+                className="mr-3 text-gray-600 hover:text-gray-800"
               >
                 <i className="fas fa-arrow-left"></i>
               </button>
               <div>
                 <h1 className="text-xl font-bold text-gray-800">Notifications</h1>
                 <p className="text-gray-600 text-sm">
-                  <span className={`font-medium ${unreadCount > 0 ? 'text-blue-600' : ''}`}>
-                    {unreadCount}
-                  </span> unread • {notifications.length} total
+                  {unreadCount} unread • {notifications.length} total
+                  {error && <span className="text-red-500 ml-2">(Using fallback data)</span>}
                 </p>
               </div>
             </div>
             
             <button
               onClick={markAllAsRead}
-              disabled={unreadCount === 0 || markingAllAsRead}
-              className={`px-4 py-2 rounded text-sm font-medium transition-colors ${
-                unreadCount === 0 || markingAllAsRead
-                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                  : 'bg-blue-600 text-white hover:bg-blue-700'
-              }`}
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm"
+              disabled={unreadCount === 0}
             >
-              {markingAllAsRead ? (
-                <>
-                  <i className="fas fa-spinner fa-spin mr-2"></i>
-                  Processing...
-                </>
-              ) : (
-                <>
-                  <i className="fas fa-check-double mr-2"></i>
-                  Mark All Read
-                </>
-              )}
+              <i className="fas fa-check-double mr-2"></i>
+              Mark All Read
             </button>
           </div>
         </div>
@@ -333,37 +255,41 @@ const NotificationsPage = () => {
       {/* Mobile Tabs */}
       <MobileTabs />
 
+      {/* Error Alert */}
+      {error && (
+        <div className="max-w-7xl mx-auto px-4 pt-4">
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4">
+            <div className="flex items-center">
+              <i className="fas fa-exclamation-triangle text-yellow-600 mr-3"></i>
+              <div>
+                <p className="text-yellow-700 text-sm">
+                  Showing offline notifications. API Error: {error}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Filter Tabs */}
       <div className="max-w-7xl mx-auto px-4 pt-4">
         <div className="bg-white rounded-lg shadow overflow-hidden mb-4">
           <div className="flex">
             <button
               onClick={() => setActiveFilter('all')}
-              className={`flex-1 py-3 text-center transition-colors ${
-                activeFilter === 'all' 
-                  ? 'bg-blue-600 text-white font-medium' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
+              className={`flex-1 py-3 text-center ${activeFilter === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
             >
               All
             </button>
             <button
               onClick={() => setActiveFilter('unread')}
-              className={`flex-1 py-3 text-center transition-colors ${
-                activeFilter === 'unread' 
-                  ? 'bg-blue-600 text-white font-medium' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
+              className={`flex-1 py-3 text-center ${activeFilter === 'unread' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
             >
               Unread
             </button>
             <button
               onClick={() => setActiveFilter('read')}
-              className={`flex-1 py-3 text-center transition-colors ${
-                activeFilter === 'read' 
-                  ? 'bg-blue-600 text-white font-medium' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
+              className={`flex-1 py-3 text-center ${activeFilter === 'read' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
             >
               Read
             </button>
@@ -376,32 +302,30 @@ const NotificationsPage = () => {
             filteredNotifications.map((notification) => (
               <div
                 key={notification.id}
-                className={`p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors ${
-                  !notification.isRead ? 'bg-blue-50 hover:bg-blue-100' : ''
-                }`}
+                className={`p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer ${!notification.isRead ? 'bg-blue-50' : ''}`}
                 onClick={() => toggleNotificationExpansion(notification.id)}
               >
                 <div className="flex items-start">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center mr-3 flex-shrink-0 ${getNotificationColor(notification)}`}>
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center mr-3 ${getNotificationColor(notification)}`}>
                     <i className={`${getNotificationIcon(notification)}`}></i>
                   </div>
                   
-                  <div className="flex-1 min-w-0">
+                  <div className="flex-1">
                     <div className="flex justify-between items-start mb-1">
-                      <h3 className="font-bold text-gray-800 truncate">{notification.title}</h3>
-                      <div className="flex items-center space-x-2 flex-shrink-0 pl-2">
+                      <h3 className="font-bold text-gray-800">{notification.title}</h3>
+                      <div className="flex items-center space-x-2">
                         {!notification.isRead && (
-                          <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
+                          <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
                         )}
-                        <span className="text-xs text-gray-500 whitespace-nowrap">
+                        <span className="text-xs text-gray-500">
                           {formatDate(notification.timestamp)}
                         </span>
                       </div>
                     </div>
                     
-                    {/* Short preview */}
-                    <p className="text-gray-600 text-sm mb-2 line-clamp-2">
-                      {notification.content.length > 100 
+                    {/* Short preview - first 100 characters */}
+                    <p className="text-gray-600 text-sm mb-2">
+                      {notification.content && notification.content.length > 100 
                         ? `${notification.content.substring(0, 100)}...`
                         : notification.content}
                     </p>
@@ -433,12 +357,9 @@ const NotificationsPage = () => {
                               <span className="font-medium">Date:</span> {formatDate(notification.timestamp)}
                             </div>
                             <div>
-                              <span className="font-medium">Status:</span> 
-                              <span className={`ml-1 px-2 py-0.5 rounded-full text-xs ${notification.isRead ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'}`}>
-                                {notification.isRead ? 'Read' : 'Unread'}
-                              </span>
+                              <span className="font-medium">Status:</span> {notification.isRead ? 'Read' : 'Unread'}
                             </div>
-                            <div className="truncate">
+                            <div>
                               <span className="font-medium">ID:</span> {notification.id}
                             </div>
                           </div>
@@ -475,16 +396,6 @@ const NotificationsPage = () => {
           </div>
         </div>
       </div>
-
-      {/* Add CSS for line clamp */}
-      <style>{`
-        .line-clamp-2 {
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
-      `}</style>
     </div>
   );
 };
