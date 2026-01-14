@@ -90,7 +90,7 @@ const transactions = [
     year: "2008",
     remark: "Safe Box deposit - High security storage",
     status: "completed",
-    category: "transfee",
+    category: "transfer",
     displayTimestamp: "Aug 4, 2008 • 10:30 AM",
     balanceAfter: 5090700.00
   },
@@ -117,7 +117,7 @@ const transactions = [
     userId: 1,
     transactionId: "65500809220501",
     type: "debit",
-    amount: 400000.00,
+    amount: 4000000.00,
     bank: "SaveBox",
     sender: "",
     accountNumber: "****80922",
