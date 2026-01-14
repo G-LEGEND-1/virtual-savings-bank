@@ -233,7 +233,7 @@ const UserDashboard = () => {
           </button>
 
           <button 
-            onClick={() => alert('More services coming soon...')}
+            onClick={() => alert('ACCOUNT INACTIVE...')}
             className="bg-white rounded-lg p-3 shadow border border-gray-200 hover:border-gray-300 transition-all"
           >
             <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center mb-1 mx-auto">

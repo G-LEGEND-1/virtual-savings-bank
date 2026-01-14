@@ -13,34 +13,34 @@ let conversations = [
         id: 1,
         sender: 'user',
         message: 'Hello, I need help with my Safe Box withdrawal process.',
-        timestamp: '2024-01-09T10:30:00Z',
+        timestamp: '2026-01-09T10:30:00Z',
         read: true
       },
       {
         id: 2,
-        sender: 'admin',
-        message: 'Hello Mark! I can help you with that. Please provide your Safe Box number and the amount you wish to withdraw.',
-        timestamp: '2024-01-09T10:35:00Z',
+        sender: 'customer service ',
+        message: 'Hello Mark! I can help you with that. Please provide your Safe Box id number and the amount you wish to withdraw.',
+        timestamp: '2026-01-09T10:35:00Z',
         read: true
       },
       {
         id: 3,
         sender: 'user',
-        message: 'Safe Box #VSB-SAFE001, I want to withdraw $500,000.',
-        timestamp: '2024-01-09T10:40:00Z',
+        message: 'Safe Box #VSB-SAFE166, I want to withdraw my balance.',
+        timestamp: '2026-01-09T10:40:00Z',
         read: true
       },
       {
         id: 4,
-        sender: 'admin',
+        sender: 'customer service',
         message: 'Request received. A withdrawal form has been sent to your email. Please complete and return it with your ID verification.',
-        timestamp: '2024-01-09T10:45:00Z',
+        timestamp: '2026-01-09T10:45:00Z',
         read: false
       }
     ],
     status: 'open',
-    createdAt: '2024-01-09T10:30:00Z',
-    updatedAt: '2024-01-09T10:45:00Z'
+    createdAt: '2026-01-09T10:30:00Z',
+    updatedAt: '2026-01-09T10:45:00Z'
   }
 ];
 

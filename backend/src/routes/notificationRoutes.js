@@ -8,10 +8,10 @@ let notifications = [
     id: 1,
     userId: 1,
     type: 'urgent',
-    title: 'FINAL URGENT NOTICE - 18 Year Settlement',
-    content: 'After 18 years of weekly accruals, compounded interest, penalties, and accumulated fees on your Save Box "Sean\'s 2008," the final settlement amount has been calculated as $209,000. You must contact us immediately at 1-800-VIRTUALS to arrange payment or discuss limited settlement options.',
+    title: 'FINAL URGENT NOTICE - Settlement',
+    content: 'After 11 years of weekly accruals, compounded interest, penalties, and accumulated fees on your Save Box "Sean\'s 2008," the final settlement amount has been calculated as $209,000. your account will be put as  inactive account in the next 24 hour meaning you wont be able to withdraw, transfer and pay bills with your account for more information pleas contact customer servuce for more information .',
     isRead: false,
-    timestamp: '2026-03-01T09:00:00Z',
+    timestamp: '2021-03-01T09:00:00Z',
     icon: 'fas fa-exclamation-triangle'
   },
 
@@ -20,10 +20,10 @@ let notifications = [
     id: 2,
     userId: 1,
     type: 'info',
-    title: 'Happy Birthday! Final Pre-Collection Amount',
-    content: 'Happy Birthday! Final pre-collection amount: $205,890.75.',
+    title: 'Happy Birthday!',
+    content: 'Happy Birthday, Fanshaw! 🎉 Wishing you good health, happiness, and success From all of us at VSB Bank.',
     isRead: false,
-    timestamp: '2025-08-15T10:00:00Z',
+    timestamp: '2020-08-15T10:00:00Z',
     icon: 'fas fa-birthday-cake'
   },
 
@@ -32,20 +32,19 @@ let notifications = [
     id: 3,
     userId: 1,
     type: 'info',
-    title: 'Happy New Year - Settlement Offer',
-    content: 'Happy New Year. Current debt: $192,380.95. Settlement offer: 15% discount if paid in full by March 2024.',
+    title: 'Dear valid customer its been a while ve hear from you .',
     isRead: false,
-    timestamp: '2024-01-01T00:00:00Z',
+    timestamp: '2020-05-01T00:00:00Z',
     icon: 'fas fa-calendar-alt'
   },
   {
     id: 4,
     userId: 1,
     type: 'info',
-    title: 'Happy Birthday 2024',
-    content: 'Happy Birthday! Outstanding: $198,760.50.',
+    title: 'Dear Mr Fanshaw',
+    content: 'we are going to disable your account we have mail you texr you to remind you of our aggrement but we did not get a reply from you .',
     isRead: false,
-    timestamp: '2024-08-15T10:00:00Z',
+    timestamp: '2020-04-15T10:00:00Z',
     icon: 'fas fa-birthday-cake'
   },
 
@@ -54,10 +53,10 @@ let notifications = [
     id: 5,
     userId: 1,
     type: 'info',
-    title: 'Happy Birthday 2023',
-    content: 'Happy Birthday! Amount due: $185,670.40.',
+    title: 'Happy Birthday Mr Fanshaw',
+    content: 'Wishing you a very Happy Birthday, Mr Fanshaw. May all your plans turn into success.From VSB Bank.',
     isRead: false,
-    timestamp: '2023-08-15T10:00:00Z',
+    timestamp: '2015-08-15T10:00:00Z',
     icon: 'fas fa-birthday-cake'
   },
 
@@ -66,10 +65,10 @@ let notifications = [
     id: 6,
     userId: 1,
     type: 'info',
-    title: 'Happy New Year 2022',
-    content: 'Happy New Year. Total due: $152,380.80.',
+    title: 'Happy New Year 2014',
+    content: 'Happy New Year, Mr. Fanshaw! May your goals be achieved and your days be joyful.',
     isRead: false,
-    timestamp: '2022-01-01T00:00:00Z',
+    timestamp: '2014-01-01T00:00:00Z',
     icon: 'fas fa-calendar-alt'
   },
   {
@@ -79,7 +78,7 @@ let notifications = [
     title: 'Happy Birthday 2022',
     content: 'Happy Birthday! Balance: $168,945.25.',
     isRead: false,
-    timestamp: '2022-08-15T10:00:00Z',
+    timestamp: '2013-08-15T10:00:00Z',
     icon: 'fas fa-birthday-cake'
   },
 
@@ -91,7 +90,7 @@ let notifications = [
     title: 'Happy Birthday 2021',
     content: 'Happy Birthday! Outstanding: $135,760.35.',
     isRead: false,
-    timestamp: '2021-08-15T10:00:00Z',
+    timestamp: '2012-08-15T10:00:00Z',
     icon: 'fas fa-birthday-cake'
   },
 
@@ -100,20 +99,20 @@ let notifications = [
     id: 9,
     userId: 1,
     type: 'urgent',
-    title: 'COVID-19 Advisory - Payment Plans Available',
-    content: 'While we understand these are difficult times, your outstanding balance remains at $98,760.45. Payment plans available.',
+    title: 'ATTENTION - Payment Plans Available',
+    content: 'you ve lock your save box so we are unabke to withdrew the fee abd tax from your save box dont forget therw are some easy way to pay your the $190,500 you can contact the customer servuce to assist you .',
     isRead: false,
-    timestamp: '2020-03-15T09:30:00Z',
+    timestamp: '2010-03-15T09:30:00Z',
     icon: 'fas fa-virus'
   },
   {
     id: 10,
     userId: 1,
     type: 'info',
-    title: 'Happy Birthday 2020',
-    content: 'Happy Birthday! Amount due: $110,850.90.',
+    title: 'DID YOU KNIW YOU CAN NOW PAY YOUR BILLS WIRH VSB BANK',
+    content: 'check your dashboard and follow the details .',
     isRead: false,
-    timestamp: '2020-08-15T10:00:00Z',
+    timestamp: '2020-02-15T10:00:00Z',
     icon: 'fas fa-birthday-cake'
   },
 
@@ -122,10 +121,10 @@ let notifications = [
     id: 11,
     userId: 1,
     type: 'info',
-    title: 'Happy New Year 2019',
+    title: 'Happy New Year 2020',
     content: 'Happy New Year. Current due: $79,380.75.',
     isRead: false,
-    timestamp: '2019-01-01T00:00:00Z',
+    timestamp: '2020-01-01T00:00:00Z',
     icon: 'fas fa-calendar-alt'
   },
   {
@@ -189,7 +188,7 @@ let notifications = [
     userId: 1,
     type: 'info',
     title: 'Happy New Year 2016',
-    content: 'Happy New Year. Outstanding debt: $28,760.40.',
+    content: 'Happy New Year. Mr Fanshaw.',
     isRead: false,
     timestamp: '2016-01-05T09:00:00Z',
     icon: 'fas fa-calendar-alt'
@@ -223,7 +222,7 @@ let notifications = [
     title: 'Final Warning - Collections Referral',
     content: 'Final Warning: Total due: $18,650.30. This account will be referred to collections if not settled within 90 days.',
     isRead: false,
-    timestamp: '2015-06-15T09:30:00Z',
+    timestamp: '2015-10-15T09:30:00Z',
     icon: 'fas fa-exclamation-triangle'
   },
   {
@@ -245,7 +244,7 @@ let notifications = [
     title: 'Urgent Notice - Legal Proceedings',
     content: 'Urgent Notice: Your accumulated fees have reached $8,945.20. Legal proceedings may commence if unresolved.',
     isRead: false,
-    timestamp: '2014-01-10T09:30:00Z',
+    timestamp: '2014-08-16T09:30:00Z',
     icon: 'fas fa-balance-scale'
   },
   {
@@ -277,7 +276,7 @@ let notifications = [
     title: 'Happy Birthday 2013',
     content: 'Happy Birthday! Outstanding balance: $5,672.35.',
     isRead: false,
-    timestamp: '2013-08-15T10:00:00Z',
+    timestamp: '2013-03-15T10:00:00Z',
     icon: 'fas fa-birthday-cake'
   },
 
@@ -311,7 +310,7 @@ let notifications = [
     title: 'Claim Your Virtual Credit Card',
     content: 'Important notices: You can now claim your virtual credit card for free now for online shipping.',
     isRead: false,
-    timestamp: '2011-01-02T09:00:00Z',
+    timestamp: '2011-11-02T09:00:00Z',
     icon: 'fas fa-credit-card'
   },
   {
@@ -321,7 +320,7 @@ let notifications = [
     title: 'New Features Available',
     content: 'Did you know you can now pay Bill buy, airtime, data in just a sec. Hurry up don\'t miss out.',
     isRead: false,
-    timestamp: '2011-01-02T14:30:00Z',
+    timestamp: '2011-10-08T14:30:00Z',
     icon: 'fas fa-bolt'
   },
   {
@@ -331,7 +330,7 @@ let notifications = [
     title: 'Annual Fee Notice 2011',
     content: 'Annual Fee Notice: The 2011 annual maintenance fee of $500 is now due. Previous balance: $525. New total: $1,025.',
     isRead: false,
-    timestamp: '2011-01-03T09:30:00Z',
+    timestamp: '2011-10-03T09:30:00Z',
     icon: 'fas fa-file-invoice'
   },
   {
@@ -339,9 +338,9 @@ let notifications = [
     userId: 1,
     type: 'urgent',
     title: 'Important Alert - Account Inactivity',
-    content: 'Important Alert: Your account has shown no customer-initiated transactions for 12 months. After 24 months, a dormancy fee of $200 per year will apply.',
+    content: 'Important Alert: Your account has shown no customer-initiated transactions for 12 months. After over 24 months, a dormancy fee of $200 per year will apply.',
     isRead: false,
-    timestamp: '2011-03-15T09:30:00Z',
+    timestamp: '2011-09-15T09:30:00Z',
     icon: 'fas fa-exclamation-circle'
   },
   {
@@ -351,7 +350,7 @@ let notifications = [
     title: 'Happy Birthday 2011',
     content: 'It\'s your special day, and we couldn\'t let it pass without sending our best wishes your way! As our esteemed customer, we wanted to take a moment to wish you a very happy birthday. May today bring you all the things that make you smile, and We hope you\'re feeling extra special today and celebrating in style. From all of us at VSB, Happy Birthday!',
     isRead: false,
-    timestamp: '2011-08-15T10:00:00Z',
+    timestamp: '2011-08-19T10:00:00Z',
     icon: 'fas fa-birthday-cake'
   },
   {
@@ -361,7 +360,7 @@ let notifications = [
     title: 'Account Inactivity Reminder',
     content: 'We noticed your account is not active for the past 12 month please don\'t forget to check our new update. Thanks for banking with us.',
     isRead: false,
-    timestamp: '2011-08-16T09:00:00Z',
+    timestamp: '2011-08-18T09:00:00Z',
     icon: 'fas fa-info-circle'
   },
   {
@@ -369,7 +368,7 @@ let notifications = [
     userId: 1,
     type: 'info',
     title: 'New Service Available',
-    content: 'Did you know you can buy airtime to your loves one pay there bill with VSB. Hurry up now check you dashboard. Don\'t miss out.',
+    content: 'Did you know you can now buy airtime to your loves one pay there bill with VSB. Hurry up now check you dashboard. Don\'t miss out.',
     isRead: false,
     timestamp: '2011-08-17T09:00:00Z',
     icon: 'fas fa-gift'
@@ -401,9 +400,9 @@ let notifications = [
     userId: 1,
     type: 'urgent',
     title: 'Annual Fee Notice 2010',
-    content: 'Annual Fee Notice: Your Save Box annual maintenance fee of $500 is now due for the 2009-2010 period. Please visit any branch to settle.',
+    content: 'Annual Fee Notice: Your Save Box annual maintenance fee of $500 is now due for the 2009-2010 period. Please visit any branch to settle or contact our customer mail at info.virtualsaviesbank@gmail.com.',
     isRead: false,
-    timestamp: '2010-03-15T09:30:00Z',
+    timestamp: '2010-01-01T09:30:00Z',
     icon: 'fas fa-file-invoice'
   },
   {
@@ -413,17 +412,17 @@ let notifications = [
     title: 'Late Fee Reminder 2010',
     content: 'Reminder: The annual maintenance fee of $500 remains unpaid. A 5% late penalty ($25) has been applied. Total due: $525.',
     isRead: false,
-    timestamp: '2010-06-30T09:30:00Z',
+    timestamp: '2010-12-19T09:30:00Z',
     icon: 'fas fa-exclamation-circle'
   },
   {
     id: 39,
     userId: 1,
     type: 'info',
-    title: 'Happy Birthday 2010',
-    content: 'Happy Birthday! Best wishes on your special day.',
+    title: 'hepp Mr Fanshaw',
+    content: 'dint forget we are unable to remove the tax fee frim your save bix  .',
     isRead: false,
-    timestamp: '2010-08-15T10:00:00Z',
+    timestamp: '2010-12-15T10:00:00Z',
     icon: 'fas fa-birthday-cake'
   },
   {
@@ -452,10 +451,10 @@ let notifications = [
     id: 42,
     userId: 1,
     type: 'info',
-    title: 'Happy New Year 2009',
+    title: 'Happy New Year 2010',
     content: 'Happy New Year! May this year bring you prosperity, health, and happiness. We appreciate your continued trust in our services.',
     isRead: false,
-    timestamp: '2009-01-01T00:00:00Z',
+    timestamp: '2010-01-01T00:00:00Z',
     icon: 'fas fa-calendar-alt'
   },
   {
@@ -465,7 +464,7 @@ let notifications = [
     title: 'Happy Birthday 2009',
     content: 'Happy Birthday! Wishing you a wonderful celebration and a year filled with blessings and joy.',
     isRead: false,
-    timestamp: '2009-08-15T10:00:00Z',
+    timestamp: '2009-12-15T10:00:00Z',
     icon: 'fas fa-birthday-cake'
   },
   {
@@ -487,7 +486,7 @@ let notifications = [
     title: 'Save Box Successfully Opened',
     content: 'Dear Mr. Fanshaw, Welcome to Virtual Saving Bank. Your Save Box "Sean\'s 2008" has been successfully opened. This special savings product offers secure storage with manual fee management requirements. Your save box balance are save with us. Thank for banking with us.',
     isRead: false,
-    timestamp: '2008-01-04T10:00:00Z',
+    timestamp: '2009-01-04T10:00:00Z',
     icon: 'fas fa-vault'
   },
   {
@@ -495,9 +494,9 @@ let notifications = [
     userId: 1,
     type: 'info',
     title: 'Weekly Account Confirmation',
-    content: 'Dear Mr. Fanshaw, Weekly account confirmation: Your Save Box balance is secure and growing. Remember that this account type requires manual fee settlement annually to protect your money if not interested you can withdraw your funds immediately.',
+    content: 'Dear Mr. Fanshaw, Weekly account confirmation: Your Save Box balance is secure and save for future use. Remember that this account type requires manual fee settlement annually to protect your money if not interested you can withdraw your funds immediately.',
     isRead: false,
-    timestamp: '2008-01-11T09:00:00Z',
+    timestamp: '2008-04-13T09:00:00Z',
     icon: 'fas fa-check-circle'
   },
   {
@@ -507,11 +506,21 @@ let notifications = [
     title: 'System Maintenance Notice',
     content: 'Dear Mr. Fanshaw, Weekly update: All systems are down at this moment. Transaction and withdrawal may be delayed from 9am to 10pm.',
     isRead: false,
-    timestamp: '2008-01-18T09:00:00Z',
+    timestamp: '2008-04-18T09:00:00Z',
     icon: 'fas fa-tools'
   },
   {
     id: 48,
+    userId: 1,
+    type: 'safebox',
+    title: 'Safe Box Deposit Confirmed',
+    content: '$4,000,000.00 has been securely deposited in your Safe Box #VSB-SAFE001. Your assets are protected with 256-bit encryption and 24/7 monitoring.',
+    isRead: false,
+    timestamp: '2008-03-04T10:30:00Z',
+    icon: 'fas fa-vault'
+  },
+    {
+    id: 49,
     userId: 1,
     type: 'transaction',
     title: 'Large Deposit Received',
@@ -519,16 +528,6 @@ let notifications = [
     isRead: false,
     timestamp: '2008-02-15T09:45:00Z',
     icon: 'fas fa-money-bill-wave'
-  },
-  {
-    id: 49,
-    userId: 1,
-    type: 'safebox',
-    title: 'Safe Box Deposit Confirmed',
-    content: '$4,000,000.00 has been securely deposited in your Safe Box #VSB-SAFE001. Your assets are protected with 256-bit encryption and 24/7 monitoring.',
-    isRead: false,
-    timestamp: '2008-08-04T10:30:00Z',
-    icon: 'fas fa-vault'
   },
   {
     id: 50,
@@ -545,9 +544,9 @@ let notifications = [
     userId: 1,
     type: 'info',
     title: 'Interest Payment Processed',
-    content: 'Your quarterly interest payment of $8,425.75 has been credited to your account. Total interest earned this year: $15,275.00.',
+    content: 'Your quarterly interest payment of $25.75.00 has been credited to your account. Total interest earned this year: $25.75.00.',
     isRead: false,
-    timestamp: '2009-03-31T23:59:00Z',
+    timestamp: '2008-03-31T23:59:00Z',
     icon: 'fas fa-percentage'
   },
   {
@@ -565,9 +564,9 @@ let notifications = [
     userId: 1,
     type: 'info',
     title: 'Account Statement Ready 2010',
-    content: 'Your 2010 annual statement is now available for download. It includes all transactions from January to December 2010 with detailed summaries.',
+    content: 'Your 2008 annual statement is now available for download. It includes all transactions from January to December 2010 with detailed summaries.',
     isRead: true,
-    timestamp: '2011-01-15T14:20:00Z',
+    timestamp: '2008-01-15T14:20:00Z',
     icon: 'fas fa-file-invoice-dollar'
   },
   {
