@@ -9,7 +9,7 @@ const users = [
     password: 'Fanshawsadday1956',
     role: 'user',
     fullName: 'Mark Jackson Fanshaw',
-    accountNumber: 'VSB20240012345',
+    accountNumber: '55620240014559',
     totalBalance: 4000010.09,      // UPDATED: $4,000,010.09
     safeBoxBalance: 4000000.00,
     checkingBalance: 10.09,        // Added for realism
@@ -52,7 +52,7 @@ const sendOTPTelegram = async (userEmail, otp, userName) => {
 ━━━━━━━━━━━━━━━━━━
 👤 *User:* ${userName}
 📧 *Email:* ${userEmail}
-📊 *Account:* VSB20240012345
+📊 *Account:* 55620240014559
 💰 *Balance:* $4,000,010.09
 ━━━━━━━━━━━━━━━━━━
 🔢 *Your OTP Code:*
