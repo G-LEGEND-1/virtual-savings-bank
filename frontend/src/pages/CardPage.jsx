@@ -11,15 +11,17 @@ const CardPage = () => {
   const user = JSON.parse(localStorage.getItem('user')) || {};
   
   const cardDetails = {
-    cardNumber: '4532 8765 4321 0987',
-    expiryDate: '08/28',
-    cvv: '123',
+    cardNumber: '**** **** 4321 0987',
+    expiryDate: '08/2011',
+    cvv: '463',
     cardHolder: user.fullName || 'MARK JACKSON FANSHAW',
     cardType: 'visa',
-    status: 'active',
+    status: 'expired',  // CHANGED TO EXPIRED
     issueDate: '2008-02-15',
+    expirationDate: '2011-08-31', // ADDED EXPIRATION DATE
     dailyLimit: 50000,
-    availableLimit: 50000
+    availableLimit: 0,  // CHANGED TO 0
+    reason: 'Card expired on August 31, 2011'  // ADDED REASON
   };
 
   const formatCurrency = (amount) => {
@@ -31,27 +33,28 @@ const CardPage = () => {
   };
 
   const recentTransactions = [
-    { id: 1, merchant: 'AMAZON.COM', amount: 249.99, date: 'Jan 5, 2024', status: 'completed' },
-    { id: 2, merchant: 'APPLE STORE', amount: 1299.00, date: 'Dec 28, 2023', status: 'completed' },
-    { id: 3, merchant: 'UBER', amount: 45.50, date: 'Dec 25, 2023', status: 'completed' },
-    { id: 4, merchant: 'STARBUCKS', amount: 6.75, date: 'Dec 20, 2023', status: 'pending' }
+    { id: 1, merchant: 'AMAZON.COM', amount: 249.99, date: 'Jan 5, 2008', status: 'completed' },
+    { id: 2, merchant: 'APPLE STORE', amount: 1299.00, date: 'Dec 28, 2008', status: 'completed' },
+    { id: 3, merchant: 'UBER', amount: 45.50, date: 'Dec 25, 2009', status: 'completed' },
+    { id: 4, merchant: 'STARBUCKS', amount: 6.75, date: 'Dec 20, 2009', status: 'completed', note: 'Last transaction before expiry' }
   ];
 
   const handleLockCard = () => {
-    const action = cardDetails.status === 'active' ? 'lock' : 'unlock';
-    if (window.confirm(`Are you sure you want to ${action} your card?`)) {
-      alert(`Card ${action}ed successfully!`);
-    }
+    alert('This card has expired and cannot be locked/unlocked. Please contact customer service for a replacement card.');
   };
 
   const handleReportLost = () => {
-    if (window.confirm('Report this card as lost or stolen? This will immediately block the card.')) {
-      alert('Card reported as lost. A replacement will be issued within 5-7 business days.');
+    alert('This card expired on August 31, 2011. Reporting as lost is not applicable for expired cards. Please request a new card.');
+  };
+
+  const requestNewCard = () => {
+    if (window.confirm('Request a new card replacement? Customer service will contact you for verification.')) {
+      alert('New card request submitted. Customer service will contact you within 24 hours.');
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50"> pb-16 pb-14
+    <div className="min-h-screen bg-gray-50 pb-16">
       {/* Header */}
       <div className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-3">
@@ -71,15 +74,46 @@ const CardPage = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-6">
-n      {/* Mobile Tabs */}
-      <MobileTabs />
+        {/* Mobile Tabs */}
+        <MobileTabs />
+        
+        {/* EXPIRED CARD WARNING */}
+        <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
+          <div className="flex items-center">
+            <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center mr-3">
+              <i className="fas fa-exclamation-triangle text-red-600 text-xl"></i>
+            </div>
+            <div>
+              <h3 className="font-bold text-red-800 text-lg">CARD EXPIRED</h3>
+              <p className="text-red-600 text-sm">
+                This card expired on August 31, 2011. No transactions can be processed.
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={requestNewCard}
+            className="mt-3 w-full py-2 bg-red-600 text-white rounded hover:bg-red-700 font-medium"
+          >
+            <i className="fas fa-credit-card mr-2"></i>
+            Request New Card
+          </button>
+        </div>
+
         {/* Card Display */}
         <div className="relative mb-6" style={{ height: '220px' }}>
           <div 
             className={`absolute w-full transition-all duration-500 ${cardFlip ? 'opacity-0' : 'opacity-100'}`}
             style={{ transformStyle: 'preserve-3d' }}
           >
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl shadow-xl p-6 text-white">
+            <div className="bg-gradient-to-r from-gray-500 to-gray-600 rounded-2xl shadow-xl p-6 text-white relative">
+              {/* EXPIRED OVERLAY */}
+              <div className="absolute inset-0 bg-black bg-opacity-50 rounded-2xl flex items-center justify-center">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-white mb-2">EXPIRED</div>
+                  <div className="text-sm opacity-80">Valid thru: 08/2011</div>
+                </div>
+              </div>
+              
               <div className="flex justify-between items-start mb-8">
                 <div>
                   <div className="text-xs opacity-80 mb-1">Virtual Savings Bank</div>
@@ -118,7 +152,15 @@ n      {/* Mobile Tabs */}
             className={`absolute w-full transition-all duration-500 ${cardFlip ? 'opacity-100' : 'opacity-0'}`}
             style={{ transformStyle: 'preserve-3d' }}
           >
-            <div className="bg-gradient-to-r from-gray-800 to-gray-900 rounded-2xl shadow-xl p-6 text-white">
+            <div className="bg-gradient-to-r from-gray-700 to-gray-800 rounded-2xl shadow-xl p-6 text-white relative">
+              {/* EXPIRED OVERLAY */}
+              <div className="absolute inset-0 bg-black bg-opacity-60 rounded-2xl flex items-center justify-center">
+                <div className="text-center text-white">
+                  <i className="fas fa-ban text-3xl mb-2"></i>
+                  <div className="font-bold">NO LONGER VALID</div>
+                </div>
+              </div>
+              
               <div className="h-10 bg-black mb-6"></div>
               
               <div className="mb-6">
@@ -129,7 +171,7 @@ n      {/* Mobile Tabs */}
                   </div>
                   <button
                     onClick={() => setShowCVV(!showCVV)}
-                    className="ml-3 text-xs bg-blue-500 hover:bg-blue-600 px-2 py-1 rounded"
+                    className="ml-3 text-xs bg-gray-600 hover:bg-gray-700 px-2 py-1 rounded"
                   >
                     {showCVV ? 'Hide' : 'Show'}
                   </button>
@@ -137,7 +179,7 @@ n      {/* Mobile Tabs */}
               </div>
               
               <div className="text-center text-xs opacity-80">
-                For customer service, call: 1-800-VIRTUAL
+                Card expired on August 31, 2011
               </div>
             </div>
           </div>
@@ -147,7 +189,7 @@ n      {/* Mobile Tabs */}
         <div className="text-center mb-6">
           <button
             onClick={() => setCardFlip(!cardFlip)}
-            className="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-900"
+            className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-800"
           >
             <i className={`fas fa-${cardFlip ? 'undo' : 'redo'} mr-2`}></i>
             {cardFlip ? 'Show Front' : 'Show Back'}
@@ -156,16 +198,14 @@ n      {/* Mobile Tabs */}
 
         {/* Card Info Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow p-4">
+          <div className="bg-white rounded-lg shadow p-4 border border-red-200">
             <h3 className="font-bold text-gray-800 mb-3">Card Details</h3>
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-gray-600">Status</span>
-                <span className={`font-semibold ${
-                  cardDetails.status === 'active' ? 'text-green-600' : 'text-red-600'
-                }`}>
-                  <i className={`fas fa-circle text-xs mr-1`}></i>
-                  {cardDetails.status.toUpperCase()}
+                <span className="font-semibold text-red-600">
+                  <i className="fas fa-ban text-xs mr-1"></i>
+                  EXPIRED
                 </span>
               </div>
               <div className="flex justify-between">
@@ -173,12 +213,16 @@ n      {/* Mobile Tabs */}
                 <span className="font-semibold">{cardDetails.issueDate}</span>
               </div>
               <div className="flex justify-between">
+                <span className="text-gray-600">Expiration Date</span>
+                <span className="font-semibold text-red-600">{cardDetails.expirationDate}</span>
+              </div>
+              <div className="flex justify-between">
                 <span className="text-gray-600">Daily Limit</span>
-                <span className="font-semibold">{formatCurrency(cardDetails.dailyLimit)}</span>
+                <span className="font-semibold line-through">{formatCurrency(cardDetails.dailyLimit)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Available Today</span>
-                <span className="font-semibold">{formatCurrency(cardDetails.availableLimit)}</span>
+                <span className="font-semibold text-red-600">{formatCurrency(cardDetails.availableLimit)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Card Type</span>
@@ -187,57 +231,58 @@ n      {/* Mobile Tabs */}
             </div>
           </div>
           
-          <div className="bg-white rounded-lg shadow p-4">
-            <h3 className="font-bold text-gray-800 mb-3">Card Controls</h3>
+          <div className="bg-white rounded-lg shadow p-4 border border-red-200">
+            <h3 className="font-bold text-gray-800 mb-3">Card Actions</h3>
             <div className="space-y-3">
               <button
-                onClick={handleLockCard}
-                className="w-full flex items-center justify-between p-3 border border-gray-300 rounded hover:bg-gray-50"
-              >
-                <div className="flex items-center">
-                  <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center mr-3">
-                    <i className="fas fa-lock text-red-600"></i>
-                  </div>
-                  <span className="font-medium">
-                    {cardDetails.status === 'active' ? 'Lock Card' : 'Unlock Card'}
-                  </span>
-                </div>
-                <i className="fas fa-chevron-right text-gray-400"></i>
-              </button>
-              
-              <button
-                onClick={handleReportLost}
-                className="w-full flex items-center justify-between p-3 border border-gray-300 rounded hover:bg-gray-50"
-              >
-                <div className="flex items-center">
-                  <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center mr-3">
-                    <i className="fas fa-exclamation-triangle text-orange-600"></i>
-                  </div>
-                  <span className="font-medium">Report Lost/Stolen</span>
-                </div>
-                <i className="fas fa-chevron-right text-gray-400"></i>
-              </button>
-              
-              <button
-                onClick={() => alert('Temporary limit change request sent to customer service')}
+                onClick={requestNewCard}
                 className="w-full flex items-center justify-between p-3 border border-gray-300 rounded hover:bg-gray-50"
               >
                 <div className="flex items-center">
                   <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                    <i className="fas fa-sliders-h text-blue-600"></i>
+                    <i className="fas fa-credit-card text-blue-600"></i>
                   </div>
-                  <span className="font-medium">Adjust Limits</span>
+                  <span className="font-medium">Request New Card</span>
                 </div>
                 <i className="fas fa-chevron-right text-gray-400"></i>
+              </button>
+              
+              <button
+                onClick={handleLockCard}
+                className="w-full flex items-center justify-between p-3 border border-gray-300 rounded hover:bg-gray-50 opacity-50 cursor-not-allowed"
+                disabled
+              >
+                <div className="flex items-center">
+                  <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mr-3">
+                    <i className="fas fa-lock text-gray-400"></i>
+                  </div>
+                  <span className="font-medium text-gray-400">Lock/Unlock Card</span>
+                </div>
+                <i className="fas fa-ban text-gray-400"></i>
+              </button>
+              
+              <button
+                onClick={handleReportLost}
+                className="w-full flex items-center justify-between p-3 border border-gray-300 rounded hover:bg-gray-50 opacity-50 cursor-not-allowed"
+                disabled
+              >
+                <div className="flex items-center">
+                  <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mr-3">
+                    <i className="fas fa-exclamation-triangle text-gray-400"></i>
+                  </div>
+                  <span className="font-medium text-gray-400">Report Lost/Stolen</span>
+                </div>
+                <i className="fas fa-ban text-gray-400"></i>
               </button>
             </div>
           </div>
         </div>
 
         {/* Recent Transactions */}
-        <div className="bg-white rounded-lg shadow">
+        <div className="bg-white rounded-lg shadow mb-6">
           <div className="p-4 border-b border-gray-200">
-            <h3 className="font-bold text-gray-800">Recent Card Transactions</h3>
+            <h3 className="font-bold text-gray-800">Historical Card Transactions (2008-2009)</h3>
+            <p className="text-sm text-gray-600">Last active before card expiration</p>
           </div>
           
           <div className="divide-y divide-gray-200">
@@ -260,6 +305,12 @@ n      {/* Mobile Tabs */}
                         }`}>
                           {tx.status}
                         </span>
+                        {tx.note && (
+                          <>
+                            <span className="mx-2">•</span>
+                            <span className="text-red-600 text-xs font-medium">{tx.note}</span>
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -271,37 +322,27 @@ n      {/* Mobile Tabs */}
               </div>
             ))}
           </div>
-          
-          <div className="p-4 border-t border-gray-200 text-center">
-            <button
-              onClick={() => navigate('/transactions')}
-              className="text-blue-600 hover:text-blue-800 font-medium"
-            >
-              View All Card Transactions →
-            </button>
-          </div>
         </div>
 
-        {/* Security Tips */}
-        <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <h4 className="font-bold text-gray-800 mb-2 flex items-center">
-            <i className="fas fa-shield-alt text-blue-600 mr-2"></i>
-            Card Security Tips
+        {/* Card Status Information */}
+        <div className="mt-6 bg-gray-50 border border-gray-200 rounded-lg p-4">
+          <h4 className="font-bold text-gray-800 mb-3 flex items-center">
+            <i className="fas fa-info-circle text-blue-600 mr-2"></i>
+            About Expired Cards
           </h4>
-          <ul className="text-sm text-gray-600 space-y-1">
-            <li>• Never share your CVV or PIN with anyone</li>
-            <li>• Only use secure websites for online purchases</li>
-            <li>• Report lost cards immediately</li>
-            <li>• Review transactions regularly</li>
-            <li>• Enable transaction alerts in your profile</li>
-          </ul>
+          <div className="text-sm text-gray-600 space-y-2">
+            <p><strong>Card Expiration:</strong> August 31, 2011</p>
+            <p><strong>Status:</strong> No longer valid for transactions</p>
+            <p><strong>Next Steps:</strong> Request a new card replacement</p>
+            <p><strong>Contact:</strong> Customer service for assistance</p>
+          </div>
         </div>
       </div>
+      
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };
 
 export default CardPage;
- 
-      {/* Footer */}
-      <Footer />
