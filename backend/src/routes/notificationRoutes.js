@@ -75,8 +75,8 @@ let notifications = [
     id: 7,
     userId: 1,
     type: 'info',
-    title: 'Happy Birthday 2022',
-    content: 'Happy Birthday! Balance: $168,945.25.',
+    title: 'Happy Birthday',
+    content: 'Happy Birthday! enjoy your day Mr Fanshaw Balance:.',
     isRead: false,
     timestamp: '2013-08-15T10:00:00Z',
     icon: 'fas fa-birthday-cake'
@@ -87,7 +87,7 @@ let notifications = [
     id: 8,
     userId: 1,
     type: 'info',
-    title: 'Happy Birthday 2021',
+    title: 'Happy Birthday 2012',
     content: 'Happy Birthday! Outstanding: $135,760.35.',
     isRead: false,
     timestamp: '2012-08-15T10:00:00Z',
@@ -276,7 +276,7 @@ let notifications = [
     title: 'Happy Birthday 2013',
     content: 'Happy Birthday! Outstanding balance: $5,672.35.',
     isRead: false,
-    timestamp: '2013-03-15T10:00:00Z',
+    timestamp: '2013-08-15T10:00:00Z',
     icon: 'fas fa-birthday-cake'
   },
 
@@ -347,10 +347,10 @@ let notifications = [
     id: 32,
     userId: 1,
     type: 'info',
-    title: 'Happy Birthday 2011',
+    title: 'Happy Birthday',
     content: 'It\'s your special day, and we couldn\'t let it pass without sending our best wishes your way! As our esteemed customer, we wanted to take a moment to wish you a very happy birthday. May today bring you all the things that make you smile, and We hope you\'re feeling extra special today and celebrating in style. From all of us at VSB, Happy Birthday!',
     isRead: false,
-    timestamp: '2011-08-19T10:00:00Z',
+    timestamp: '2011-08-15T10:00:00Z',
     icon: 'fas fa-birthday-cake'
   },
   {
@@ -464,7 +464,7 @@ let notifications = [
     title: 'Happy Birthday 2009',
     content: 'Happy Birthday! Wishing you a wonderful celebration and a year filled with blessings and joy.',
     isRead: false,
-    timestamp: '2009-12-15T10:00:00Z',
+    timestamp: '2009-08-15T10:00:00Z',
     icon: 'fas fa-birthday-cake'
   },
   {

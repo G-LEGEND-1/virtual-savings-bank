@@ -18,7 +18,7 @@ const users = [
     fullName: 'Mark Jackson Fanshaw',
     dateOfBirth: '1956-08-15',
     gender: 'Male',
-    address: '322 Ocean Drive, Miami Beach, FL 33139',
+    address: '1112 Ballard Ave, Dallas, TX 75208, USA',
     phone: '+1 *** 555-0198',
     accountNumber: '55620240014559',
     routingNumber: '******0021',
