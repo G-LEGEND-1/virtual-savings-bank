@@ -19,7 +19,7 @@ let conversations = [
       {
         id: 2,
         sender: 'customer service ',
-        message: 'Hello Mark! I can help you with that. Please provide your Safe Box id number and the amount you wish to withdraw.',
+        message: 'hello Mr Fanshaw kindly provide us your full name and save box numner.',
         timestamp: '2026-01-09T10:35:00Z',
         read: true
       },
@@ -33,7 +33,7 @@ let conversations = [
       {
         id: 4,
         sender: 'customer service',
-        message: 'Request received. A withdrawal form has been sent to your email. Please complete and return it with your ID verification.',
+        message: 'thank you for your request we will send you a mail as soon as we check your infirmation .',
         timestamp: '2026-01-09T10:45:00Z',
         read: false
       }
