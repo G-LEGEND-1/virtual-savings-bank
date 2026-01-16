@@ -78,7 +78,7 @@ let notifications = [
     title: 'Dear Valued Customer',
     content: 'VSB Bank will undergo a scheduled system upgrade from 8:00 PM to 10:00 PM today to improve our services. Some transactions may be unavailable during this time.Thank you for banking with us. :.',
     isRead: false,
-    timestamp: '2013-08-15T10:00:00Z',
+    timestamp: '2013-08-14T10:00:00Z',
     icon: 'fas fa-birthday-cake'
   },
 
