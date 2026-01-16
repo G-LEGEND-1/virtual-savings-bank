@@ -170,9 +170,9 @@ const ProfilePage = () => {
                   </div>
                   <div>
                     <label className="block text-gray-500 text-sm">Account Status</label>
-                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                      <i className="fas fa-check-circle mr-1"></i>
-                      Active
+                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                      <i className="fas fa-times-circle mr-1"></i>
+                      Inactive
                     </span>
                   </div>
                 </div>
@@ -182,7 +182,7 @@ const ProfilePage = () => {
             {/* Account Security */}
             <div className="mt-8 pt-8 border-t border-gray-200">
               <h3 className="text-lg font-bold text-gray-800 mb-4">Account Security</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="bg-blue-50 rounded-lg p-4">
                   <div className="flex items-center">
                     <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
@@ -191,17 +191,6 @@ const ProfilePage = () => {
                     <div>
                       <div className="text-sm text-gray-600">2FA Status</div>
                       <div className="font-bold text-blue-700">Enabled</div>
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-green-50 rounded-lg p-4">
-                  <div className="flex items-center">
-                    <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3">
-                      <i className="fas fa-history text-green-600"></i>
-                    </div>
-                    <div>
-                      <div className="text-sm text-gray-600">Last Login</div>
-                      <div className="font-bold text-green-700">Today, 10:30 AM</div>
                     </div>
                   </div>
                 </div>

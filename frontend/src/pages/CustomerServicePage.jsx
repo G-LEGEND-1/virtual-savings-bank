@@ -93,9 +93,9 @@ const CustomerServicePage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center"> pb-16 pb-14
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center pb-16">
         <div className="text-center">
-          <div className="spinner mx-auto mb-4"></div>
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-600 border-r-transparent mb-4"></div>
           <p className="text-gray-600">Loading customer service...</p>
         </div>
       </div>
@@ -103,7 +103,7 @@ const CustomerServicePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50"> pb-16 pb-14
+    <div className="min-h-screen bg-gray-50 pb-16">
       {/* Header */}
       <div className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-3">
@@ -142,8 +142,8 @@ const CustomerServicePage = () => {
       </div>
 
       <div className="max-w-4xl mx-auto px-4 py-6">
-n      {/* Mobile Tabs */}
-      <MobileTabs />
+        <MobileTabs />
+        
         {/* Chat Container */}
         <div className="bg-white rounded-lg shadow-lg overflow-hidden" style={{ height: '70vh' }}>
           {/* Chat Header */}
@@ -244,66 +244,10 @@ n      {/* Mobile Tabs */}
           </div>
         </div>
         
-        {/* Quick Help Topics */}
-        <div className="mt-6">
-          <h3 className="font-bold text-gray-800 mb-3">Quick Help Topics</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <button
-              onClick={() => setNewMessage('I need help with my Safe Box withdrawal process.')}
-              className="bg-white border border-gray-300 rounded-lg p-3 text-left hover:bg-gray-50"
-            >
-              <div className="flex items-center mb-2">
-                <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center mr-2">
-                  <i className="fas fa-vault text-yellow-600"></i>
-                </div>
-                <span className="font-medium">Safe Box Help</span>
-              </div>
-              <p className="text-sm text-gray-600">Withdrawals, deposits, and security</p>
-            </button>
-            
-            <button
-              onClick={() => setNewMessage('I have questions about my transaction history from 2008-2010.')}
-              className="bg-white border border-gray-300 rounded-lg p-3 text-left hover:bg-gray-50"
-            >
-              <div className="flex items-center mb-2">
-                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-2">
-                  <i className="fas fa-exchange-alt text-blue-600"></i>
-                </div>
-                <span className="font-medium">Transaction History</span>
-              </div>
-              <p className="text-sm text-gray-600">Questions about past transactions</p>
-            </button>
-            
-            <button
-              onClick={() => setNewMessage('I need assistance with my debit card.')}
-              className="bg-white border border-gray-300 rounded-lg p-3 text-left hover:bg-gray-50"
-            >
-              <div className="flex items-center mb-2">
-                <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mr-2">
-                  <i className="fas fa-credit-card text-purple-600"></i>
-                </div>
-                <span className="font-medium">Card Services</span>
-              </div>
-              <p className="text-sm text-gray-600">Card issues, limits, and replacements</p>
-            </button>
-          </div>
-        </div>
-        
         {/* Contact Info */}
         <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
           <h4 className="font-bold text-gray-800 mb-2">Other Ways to Contact Us</h4>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="flex items-center">
-              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                <i className="fas fa-phone text-blue-600"></i>
-              </div>
-              <div>
-                <div className="font-medium">Phone Support</div>
-                <div className="text-sm text-gray-600">1-800-VIRTUAL</div>
-                <div className="text-xs text-gray-500">24/7 toll-free</div>
-              </div>
-            </div>
-            
+          <div className="flex justify-center">
             <div className="flex items-center">
               <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3">
                 <i className="fas fa-envelope text-green-600"></i>
@@ -311,28 +255,16 @@ n      {/* Mobile Tabs */}
               <div>
                 <div className="font-medium">Email</div>
                 <div className="text-sm text-gray-600">support@virtualbank.com</div>
-                <div className="text-xs text-gray-500">Response within 24h</div>
-              </div>
-            </div>
-            
-            <div className="flex items-center">
-              <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-3">
-                <i className="fas fa-map-marker-alt text-purple-600"></i>
-              </div>
-              <div>
-                <div className="font-medium">Headquarters</div>
-                <div className="text-sm text-gray-600">123 Wall Street, NYC</div>
-                <div className="text-xs text-gray-500">By appointment only</div>
+                <div className="text-xs text-gray-500">Response within 24 hours</div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      
+      <Footer />
     </div>
   );
 };
 
 export default CustomerServicePage;
- 
-      {/* Footer */}
-      <Footer />
