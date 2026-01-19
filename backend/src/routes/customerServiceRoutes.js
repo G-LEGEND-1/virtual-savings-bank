@@ -97,13 +97,13 @@ let conversations = [
         id: 13,
         sender: 'customer service',
         message: 'Dear Mr. Fenshaw,\nWe sincerely apologize for any inconvenience caused and appreciate your patience. Please be advised that your SafeBox account is currently under review. Our team has forwarded your SafeBox ID to the Administration Department for verification, as the system currently indicates that the SafeBox is inactive.\nKindly allow 2–3 business days for the verification process. Our Customer Service team will notify you immediately once the administrator has completed the cross-check and your account status has been updated.\nWe value your trust in our services and remain committed to ensuring a secure and seamless banking experience for you.\nThank you for your understanding.',
-        timestamp: '2026-01-09T20:05:00Z',
+        timestamp: '2026-01-10T02:05:00Z',
         read: false
       }
     ],
     status: 'open',
     createdAt: '2026-01-09T10:30:00Z',
-    updatedAt: '2026-01-09T23:27:00Z'
+    updatedAt: '2026-01-10T02:05:00Z'
   }
 ];
 
