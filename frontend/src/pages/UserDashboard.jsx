@@ -80,7 +80,7 @@ const UserDashboard = () => {
     showAccountInactiveMessage();
   };
 
-  const handleBuyAirtime = () => {
+  const handleDeposit = () => {
     showAccountInactiveMessage();
   };
 
@@ -213,13 +213,13 @@ const UserDashboard = () => {
         {/* Additional Services */}
         <div className="grid grid-cols-3 gap-2 mb-6">
           <button 
-            onClick={handleBuyAirtime}
-            className="bg-white rounded-lg p-3 shadow border border-gray-200 hover:border-orange-300 transition-all"
+            onClick={handleDeposit}
+            className="bg-white rounded-lg p-3 shadow border border-gray-200 hover:border-green-300 transition-all"
           >
-            <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center mb-1 mx-auto">
-              <i className="fas fa-mobile-alt text-lg text-orange-500"></i>
+            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mb-1 mx-auto">
+              <i className="fas fa-money-bill-wave text-lg text-green-500"></i>
             </div>
-            <h3 className="font-medium text-gray-800 text-center text-xs">Buy Airtime</h3>
+            <h3 className="font-medium text-gray-800 text-center text-xs">Deposit</h3>
           </button>
 
           <button 

@@ -380,21 +380,6 @@ const NotificationsPage = () => {
             </div>
           )}
         </div>
-
-        {/* Help Text */}
-        <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
-          <div className="flex items-start">
-            <i className="fas fa-info-circle text-blue-500 text-lg mr-3 mt-1"></i>
-            <div>
-              <h4 className="font-bold text-gray-700 text-sm mb-1">About Notifications</h4>
-              <p className="text-gray-600 text-xs">
-                • Click on any notification to expand and see full details<br/>
-                • Unread notifications have a blue dot indicator<br/>
-                • Notifications are automatically cleared after 30 days
-              </p>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );

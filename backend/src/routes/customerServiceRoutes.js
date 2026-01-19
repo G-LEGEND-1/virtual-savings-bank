@@ -36,11 +36,74 @@ let conversations = [
         message: 'thank you for your request we will send you a mail as soon as we check your infirmation .',
         timestamp: '2026-01-09T10:45:00Z',
         read: false
+      },
+      {
+        id: 5,
+        sender: 'user',
+        message: 'Hello there',
+        timestamp: '2026-01-09T22:52:00Z',
+        read: true
+      },
+      {
+        id: 6,
+        sender: 'user',
+        message: 'How can I withdraw money sir',
+        timestamp: '2026-01-09T22:52:00Z',
+        read: true
+      },
+      {
+        id: 7,
+        sender: 'user',
+        message: 'Pls. Check out the detail and let us know the pending tax etc',
+        timestamp: '2026-01-09T23:11:00Z',
+        read: true
+      },
+      {
+        id: 8,
+        sender: 'user',
+        message: 'Sharon is waiting at your branch office in Texas',
+        timestamp: '2026-01-09T23:13:00Z',
+        read: true
+      },
+      {
+        id: 9,
+        sender: 'user',
+        message: 'Her phone',
+        timestamp: '2026-01-09T23:16:00Z',
+        read: true
+      },
+      {
+        id: 10,
+        sender: 'user',
+        message: '+16056558277',
+        timestamp: '2026-01-09T23:16:00Z',
+        read: true
+      },
+      {
+        id: 11,
+        sender: 'user',
+        message: 'Name Mark Jackson Fenshaw',
+        timestamp: '2026-01-09T23:25:00Z',
+        read: true
+      },
+      {
+        id: 12,
+        sender: 'user',
+        message: 'VSB-SAFE 001',
+        timestamp: '2026-01-09T23:27:00Z',
+        read: true
+      },
+      {
+        id: 13,
+        sender: 'customer service',
+        message: 'Dear Mr. Fenshaw,\nWe sincerely apologize for any inconvenience caused and appreciate your patience. Please be advised that your SafeBox account is currently under review. Our team has forwarded your SafeBox ID to the Administration Department for verification, as the system currently indicates that the SafeBox is inactive.\nKindly allow 2–3 business days for the verification process. Our Customer Service team will notify you immediately once the administrator has completed the cross-check and your account status has been updated.\nWe value your trust in our services and remain committed to ensuring a secure and seamless banking experience for you.\nThank you for your understanding.',
+        timestamp: '2026-01-09T20:05:00Z',
+        read: false
       }
     ],
     status: 'open',
     createdAt: '2026-01-09T10:30:00Z',
-    updatedAt: '2026-01-09T10:45:00Z'
+    updatedAt: '2026-01-09T23:27:00Z'
   }
 ];
 
