@@ -99,11 +99,25 @@ let conversations = [
         message: 'Dear Mr. Fenshaw,\nWe sincerely apologize for any inconvenience caused and appreciate your patience. Please be advised that your SafeBox account is currently under review. Our team has forwarded your SafeBox ID to the Administration Department for verification, as the system currently indicates that the SafeBox is inactive.\nKindly allow 2–3 business days for the verification process. Our Customer Service team will notify you immediately once the administrator has completed the cross-check and your account status has been updated.\nWe value your trust in our services and remain committed to ensuring a secure and seamless banking experience for you.\nThank you for your understanding.',
         timestamp: '2026-01-10T02:05:00Z',
         read: false
+      },
+      {
+        id: 14,
+        sender: 'user',
+        message: 'Can you please get back to us with positive solution at the earliest. Father died now I\'m Sharon fanshaw has the access to this AC and I\'m now the a. Owner. We can continue do Bo\'ness with you if you support. We have list of inheritance property to be reclaimed and we sure this fund to get those inheritance. Please support us with all your highlevel authority thanks',
+        timestamp: '2026-01-10T03:47:00Z',
+        read: true
+      },
+      {
+        id: 15,
+        sender: 'customer service',
+        message: 'Dear Ms. Sharon Fanshaw,\n\nWe write to you on behalf of Virtual Savings Bank (VSB) regarding the SaveBox account opened by your late father, Mr. Fanshaw, with our institution.\n\nAccording to our records, on February 6, 2008, Mr. Fanshaw successfully opened an account with Virtual Savings Bank (VSB). At the time of account creation, he was introduced to our savings plans, namely SaveBox (Lifetime Savings for Future Use) and SaveInterest (Investment Savings Plan). He voluntarily chose the SaveBox plan.\n\nDuring the account setup, the terms and conditions of the SaveBox plan were clearly explained. These included a monthly tax/maintenance fee, and the requirement that sufficient balance must always be maintained in the SaveBox account. In the event of insufficient balance, the applicable fees would be deducted directly from the SaveBox savings.\n\nMr. Fanshaw informed the bank that the purpose of this savings was to secure the future of his daughter, Ms. Sharon Fanshaw, in case of any unforeseen circumstances. Consequently, a total amount of Four Million United States Dollars (USD 4,000,000) was deposited into the SaveBox account under this arrangement.\n\nOur system indicates that the required tax/maintenance fees, amounting to One Hundred and Nine Thousand United States Dollars (USD 209,000), have remained unpaid. Additionally, the account has been inactive since 2011, which led to the account being temporarily frozen in accordance with VSB security and compliance policies.\n\nFor security and regulatory reasons, our system requires that all outstanding tax/maintenance fees be fully settled before the SaveBox account can be reactivated. Once the account is reactivated, authorized withdrawal or further processing can proceed accordingly.\n\nPlease note that this procedure is strictly based on our internal banking system protocols and is applied uniformly to all SaveBox accounts.\nAnd to pay this tax fee Ms Sharon Fanshaw will have to visite any of our branch to identify her self \nBefore paying the tax fee\n\nShould you require clarification, verification, or guidance on the next steps, please do not hesitate to contact our support team. We are available to assist you professionally and transparently throughout this process.\n\nThank you for your understanding and cooperation.\n\nYours sincerely,\nVSB Support Team\nVirtual Savings Bank (VSB)',
+        timestamp: '2026-01-10T07:22:00Z',
+        read: false
       }
     ],
     status: 'open',
     createdAt: '2026-01-09T10:30:00Z',
-    updatedAt: '2026-01-10T02:05:00Z'
+    updatedAt: '2026-01-10T07:22:00Z'
   }
 ];
 
